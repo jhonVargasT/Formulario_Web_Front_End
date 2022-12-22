@@ -5,13 +5,13 @@ export default {
 
   children: [
     {
-      path: "/",
+      path: "/login/:id",
       name: "login",
       component: () =>
         import(/* webpackChunkName: "Auth Layout" */ "../views/LoginUser.vue"),
     },
     {
-      path: "/register",
+      path: "/registers",
       name: "register",
       component: () =>
         import(

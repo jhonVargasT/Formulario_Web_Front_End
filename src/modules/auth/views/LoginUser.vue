@@ -1,11 +1,14 @@
 <template>
-  <div class="row custom-div-ini"></div>
+  <div class="row justify-center custom-div-ini"></div>
+  <span class="row justify-center login100-form-title"> INGRESO </span>
+  <span class="row justify-center login100-form-title" v-html="logTitulo">
+  </span>
   <div class="row justify-center">
     <div class="col-9">
       <span v-html="cabLog"> </span>
     </div>
   </div>
-  <div class="row justify-center login100-form-title">Ingreso</div>
+
   <div class="row justify-center">
     <div class="col-9">
       <q-form class="q-gutter-md" @submit.prevent="onSubmit">
@@ -53,11 +56,11 @@
             />
           </div>
 
-          <div v-show="reg">
+          <div>
             <div class="row justify-center">
               <span v-html="finlog"> </span>
             </div>
-            <div class="row justify-center">
+            <div class="row justify-center" v-show="reg">
               <div class="container-login100-form-btn m-t-32">
                 <router-link :to="{ name: 'register' }"
                   >¿crear cuenta?</router-link
@@ -78,21 +81,20 @@ import Swal from "sweetalert2";
 
 export default {
   setup() {
-    const reg = ref(true);
-    const { loginUser } = useAuth();
+    const reg = ref(false);
+    const { loginUser, getFormLog } = useAuth();
     const router = useRouter();
-    const cabLog = ref(
-      'Using text interpolation: <span style="color: red">This should be red.</span>Using v-html directive: This should be red.'
-    );
-    const finlog = ref(
-      'Using text interpolation: <span style="color: red">This should be red.</span>Using v-html directive: This should be red.'
-    );
+    const cabLog = ref();
+    const finlog = ref();
+    const logTitulo = ref();
     const userForm = ref({
       name: "010101",
       password: "jh@ll104499",
     });
 
     return {
+      getFormLog,
+      logTitulo,
       reg,
       cabLog,
       finlog,
@@ -100,25 +102,35 @@ export default {
       userForm,
       onSubmit: async () => {
         const { ok, message } = await loginUser(userForm.value);
-
         if (!ok) Swal.fire("Error", message, "error");
         else {
-          // Swal.fire("Success", "Usuario logueado correctamente", "success");
-          //para pasar a otra ruta
           router.push({ name: "index" });
         }
       },
     };
   },
+  mounted() {
+    const { getFormLog } = useAuth();
+    const url = window.location.href;
+    const lastChar = url.substr(url.length - 3); // => "1"
+    getFormLog(lastChar).then(
+      (data) => (
+        console.log(data),
+        (this.finlog = data.logInfe),
+        (this.cabLog = data.logSup),
+        (this.logTitulo = data.logTitulo)
+      )
+    );
+  },
 };
 </script>
 <style scoped>
 .custom-div-ini {
-  height: 20vh;
+  height: 5vh;
 }
 .login100-form-title {
   font-family: Ubuntu-Bold;
-  font-size: 28px;
+  font-size: 20px;
   color: chocolate;
   line-height: 1.2;
   text-align: center;
