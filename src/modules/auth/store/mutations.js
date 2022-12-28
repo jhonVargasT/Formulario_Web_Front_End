@@ -2,8 +2,7 @@
 
 // }
 
-export const loginUser = (state, { user, token }) => {
-  console.log(token);
+export const loginUser = (state, { user, token, formulario, proyecto }) => {
   if (token) {
     localStorage.setItem("idToken", token);
     state.idToken = token;
@@ -15,7 +14,8 @@ export const loginUser = (state, { user, token }) => {
   }*/
 
   state.user = user;
-
+  state.formulario = formulario;
+  state.proyecto = proyecto;
   state.status = "authenticated";
 };
 

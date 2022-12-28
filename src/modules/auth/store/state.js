@@ -3,4 +3,5 @@ export default () => ({
   user: null,
   idToken: null,
   refreshToken: null,
+  formulario: null,
 });

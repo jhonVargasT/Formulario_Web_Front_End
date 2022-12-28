@@ -34,23 +34,25 @@ export const createUser = async ({ commit }, user) => {
 
 export const signUser = async ({ commit }, user) => {
   const { name, password } = user;
+  const url = window.location.href;
+  const form = url.substr(url.length - 3); // => "1";
   try {
     //registrar el usuario
     const { data } = await formularioApi.post("/login", {
       name,
       password,
+      form,
       volverSecureToken: true,
     });
 
-    const { message, success, token, user } = data;
+    const { message, success, token, user, formulario, proyecto } = data;
+    console.log(data);
     // delete user.password;
-
     if (success) {
-      commit("loginUser", { user, token });
+      commit("loginUser", { proyecto, formulario, user, token });
       return { success: true, message: message };
     } else return { success: false, message: message };
   } catch (error) {
-    console.log(error);
     return { ok: false, message: error.message };
   }
 };

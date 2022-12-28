@@ -5,7 +5,7 @@
   </span>
   <div class="row justify-center">
     <div class="col-9">
-      <span v-html="cabLog"> </span>
+      <span v-show="cabLogAct" v-html="cabLog"> </span>
     </div>
   </div>
 
@@ -58,7 +58,7 @@
 
           <div>
             <div class="row justify-center">
-              <span v-html="finlog"> </span>
+              <span v-show="finLogAct" v-html="finlog"> </span>
             </div>
             <div class="row justify-center" v-show="reg">
               <div class="container-login100-form-btn m-t-32">
@@ -86,7 +86,10 @@ export default {
     const router = useRouter();
     const cabLog = ref();
     const finlog = ref();
+    const cabLogAct = ref();
+    const finLogAct = ref();
     const logTitulo = ref();
+    const lastChar = ref();
     const userForm = ref({
       name: "010101",
       password: "jh@ll104499",
@@ -94,7 +97,10 @@ export default {
 
     return {
       getFormLog,
+      cabLogAct,
+      finLogAct,
       logTitulo,
+      lastChar,
       reg,
       cabLog,
       finlog,
@@ -112,13 +118,14 @@ export default {
   mounted() {
     const { getFormLog } = useAuth();
     const url = window.location.href;
-    const lastChar = url.substr(url.length - 3); // => "1"
-    getFormLog(lastChar).then(
+    this.lastChar = url.substr(url.length - 3); // => "1"
+    getFormLog(this.lastChar).then(
       (data) => (
-        console.log(data),
         (this.finlog = data.logInfe),
         (this.cabLog = data.logSup),
-        (this.logTitulo = data.logTitulo)
+        (this.logTitulo = data.logTitulo),
+        (this.cabLogAct = data.infoSup === "1" ? true : false),
+        (this.finLogAct = data.infoInfe === "1" ? true : false)
       )
     );
   },

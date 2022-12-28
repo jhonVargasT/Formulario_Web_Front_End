@@ -15,7 +15,7 @@
             <div class="col-5">
               <span
                 class="text-weight-bolder text-uppercase text-justify custom-style-titulo"
-                v-html="titulo"
+                v-html="ejecuta"
               >
               </span>
             </div>
@@ -49,12 +49,12 @@ export default {
 
   setup() {
     const imagen = ref();
-    const titulo = ref();
+    const ejecuta = ref();
     const descripcion = ref();
     const nota = ref();
     return {
       imagen,
-      titulo,
+      ejecuta,
       descripcion,
       nota,
     };
@@ -65,7 +65,7 @@ export default {
     getProyecto().then(
       (data) => (
         (this.imagen = data.imgPortada),
-        (this.titulo = data.tituloProyecto),
+        (this.ejecuta = data.ejecuta),
         (this.descripcion = data.descripcionProyecto),
         (this.nota = data.nota)
       )
